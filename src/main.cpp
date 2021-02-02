@@ -1,32 +1,30 @@
-#include "BuildTests.h"
+#include "BuildTests.hpp"
 
 #ifndef BUILD_UNIT_TESTS
 
-#include "XMLHTML.hpp"
-#include <fstream>
-#include <filesystem>
+#include "HtmlExport.hpp"
+#include "XmlImport.hpp"
+#include <cassert>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
     assert(argc == 2);
-  
-    pugi::xml_document doc;
 
-    if (doc.load_file(argv[1]))
+    try
     {
-        Catalog catalog = LoadCatalogFromXML(doc);
-        std::string htmlCatalog = ConvertCatalogToHTML(catalog);
-        
-        std::filesystem::path path(argv[1]);
-        path.replace_extension(".html");
+        XmlImport source(argv[1]);
 
-        if (!path.has_parent_path())
+        HtmlExport destination;
+
+        if (destination.Import(source, RecordId::Cd))
         {
-            path = std::filesystem::current_path() / path;
+            destination.ExportToFile(argv[1]);
         }
-
-        std::ofstream fileStream(path);
-        fileStream.write(htmlCatalog.c_str(), htmlCatalog.length());
+    }
+    catch (const std::runtime_error &e)
+    {
+        std::cerr << e.what() << '\n';
     }
 
     return 0;

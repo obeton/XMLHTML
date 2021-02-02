@@ -5,14 +5,12 @@
 catch_amalgamated.obj
 cd_catalog.html
 cd_catalog.xml
-main.exe
 main.ilk
 main.obj
 main.pdb
 pugixml.obj
 test_html.obj
 test_load.obj
-test_main.exe
 test_main.ilk
 test_main.obj
 test_main.pdb
